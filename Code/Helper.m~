@@ -81,6 +81,8 @@ k = 10;
 
 % Initialize final size of inlier
 max = 0;
+ 
+pts(,:,:)
 
 %while i < k
 for i = 1:k
@@ -124,11 +126,4 @@ for i = 1:k
      %i = i+1;
 end
  
-
-%%
-
-figure,
-pcshow(inliers,[r g b]/255);
-drawnow;
-title('3D Point Cloud');
      
