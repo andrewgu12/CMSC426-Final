@@ -38,9 +38,7 @@ ID = imread([Path,'scene_',SceneName,'/frames/image_',FrameNum,'_depth.png']);
 Pts = [pcx pcy pcz];
 
 %%
-% r = 150;
-% xo = 320;
-% yo = 240;
+
 %  
 % imageSize = size(I);
 % [xx,yy] = ndgrid((1:imageSize(1))-yo,(1:imageSize(2))-xo);
@@ -78,13 +76,36 @@ title('3D Point Cloud');
 %% Use Ransac to detect a plane in the scene
 %i = 1;
 k = 10;
+ro = 150;
+xo = 320;
+yo = 240;
 
 % Initialize final size of inlier
-max = 0;
+max = [];
 
+pts = ((Pts(:,1)-yo).^2 + (Pts(:,2)-xo).^2) < r.^2;
+
+shrunkPts = find(pts>0);
+subsetPcx = pcx(shrunkPts,:);
+subsetPcy = pcy(shrunkPts,:);
+subsetPcz = pcz(shrunkPts,:);
+subsetR = r(shrunkPts,:);
+subsetG = g(shrunkPts,:);
+subsetB = b(shrunkPts,:);
+Pts = [subsetPcx subsetPcy subsetPcz];
+RGB = [subsetR subsetG subsetB];
 %while i < k
 for i = 1:k
-
+    
+     disp(i);
+     
+     % err array
+     err = zeros(length(Pts),1);
+     
+     % Set up inlier
+     inliers = [];
+     inlierRGB = [];
+    
      % Set up inlier index
      index = 1;
      
@@ -100,6 +121,13 @@ for i = 1:k
      Pt = [x,y,z];
      planefunction = dot(normal, Pt-Pt1); 
      
+     
+        
+     % test
+     
+     %j = 1:length(Pts);
+
+
      for j = 1:length(Pts)
          
          x_curr = Pts(j,1);
@@ -111,24 +139,25 @@ for i = 1:k
              inliers(index,1) = Pts(j,1);
              inliers(index,2) = Pts(j,2);
              inliers(index,3) = Pts(j,3);
+             inlierRGB(index,1) = RGB(j,1);
+             inlierRGB(index,2) = RGB(j,2);
+             inlierRGB(index,3) = RGB(j,3);
              index = index + 1;
          end
          
      end
      
-     if (length(inliers) > max)
-         max = length(inliers);
+     if (length(inliers) > length(max))
+         max = inliers;
      end
-     
-     Inliers = [];
      %i = i+1;
 end
- 
+
 
 %%
 
 figure,
-pcshow(inliers,[r g b]/255);
+pcshow(inliers,inlierRGB/255);
 drawnow;
 title('3D Point Cloud');
      
