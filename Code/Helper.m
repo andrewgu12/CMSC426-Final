@@ -120,6 +120,7 @@ for i = 1:k
      denominator = sqrt(coefficients(1)^2 + coefficients(2)^2 + coefficients(3)^2);
      distancesMatrix = (coefficients * modifiedPts) ./ denominator;
      
+     % find the points within a certain threshold
      inlierIndices = find(abs(distancesMatrix) < 40);
      inliers(:,1) = Pts(inlierIndices,1);
      inliers(:,2) = Pts(inlierIndices,2);
