@@ -75,27 +75,28 @@ close all;
 
 %% Use Ransac to detect a plane in the scene
 %i = 1;
-k = 200;
+k = 250;
 ro = 150;
 xo = 320;
 yo = 240;
 
 % Initialize final size of inlier
 max = [];
+RGB = [r g b];
+% 
+% pts = ((Pts(:,1)-yo).^2 + (Pts(:,2)-xo).^2) < r.^2;
+% 
+% shrunkPts = find(pts>0);
+% subsetPcx = pcx(shrunkPts,:);
+% subsetPcy = pcy(shrunkPts,:);
+% subsetPcz = pcz(shrunkPts,:);
+% subsetR = r(shrunkPts,:);
+% subsetG = g(shrunkPts,:);
+% subsetB = b(shrunkPts,:);
+% Pts = [subsetPcx subsetPcy subsetPcz];
+% RGB = [subsetR subsetG subsetB];
 
-pts = ((Pts(:,1)-yo).^2 + (Pts(:,2)-xo).^2) < r.^2;
-
-shrunkPts = find(pts>0);
-subsetPcx = pcx(shrunkPts,:);
-subsetPcy = pcy(shrunkPts,:);
-subsetPcz = pcz(shrunkPts,:);
-subsetR = r(shrunkPts,:);
-subsetG = g(shrunkPts,:);
-subsetB = b(shrunkPts,:);
-Pts = [subsetPcx subsetPcy subsetPcz];
-RGB = [subsetR subsetG subsetB];
-
-for i = 1:k          
+for i = 1:k        
      % Set up inlier
      inliers = [];
      inlierRGB = [];
@@ -119,7 +120,7 @@ for i = 1:k
      denominator = sqrt(coefficients(1)^2 + coefficients(2)^2 + coefficients(3)^2);
      distancesMatrix = (coefficients * modifiedPts) ./ denominator;
      
-     inlierIndices = find(distancesMatrix < .2);
+     inlierIndices = find(abs(distancesMatrix) < 40);
      inliers(:,1) = Pts(inlierIndices,1);
      inliers(:,2) = Pts(inlierIndices,2);
      inliers(:,3) = Pts(inlierIndices,3);
