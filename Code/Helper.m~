@@ -71,11 +71,11 @@ figure,
 pcshow(Pts,[r g b]/255);
 drawnow;
 title('3D Point Cloud');
-close all;
+
 
 %% Use Ransac to detect a plane in the scene
 %i = 1;
-k = 200;
+k = 10;
 ro = 150;
 xo = 320;
 yo = 240;
@@ -94,11 +94,20 @@ subsetG = g(shrunkPts,:);
 subsetB = b(shrunkPts,:);
 Pts = [subsetPcx subsetPcy subsetPcz];
 RGB = [subsetR subsetG subsetB];
-
-for i = 1:k          
+%while i < k
+for i = 1:k
+    
+     disp(i);
+     
+     % err array
+     err = zeros(length(Pts),1);
+     
      % Set up inlier
      inliers = [];
      inlierRGB = [];
+    
+     % Set up inlier index
+     index = 1;
      
      % Pick three points
      sample_pts = randperm(length(Pts),3);
@@ -108,24 +117,40 @@ for i = 1:k
      Pt3 = Pts(sample_pts(1,3),:);
 
      normal = cross(Pt1-Pt2, Pt1-Pt3);
-     syms x y z;
+     syms x y z
      Pt = [x,y,z];
      planefunction = dot(normal, Pt-Pt1); 
      % a,b,c,d
-     coefficients = double(fliplr(coeffs(planefunction,[x y z])));
+     coefficients = fliplr(coeffs(planefunction,[x y z]));
      
-     % build out and calculate entire distances matrix
+     % use this for numerator
      modifiedPts = [Pts ones(size(Pts,1),1)]';
      denominator = sqrt(coefficients(1)^2 + coefficients(2)^2 + coefficients(3)^2);
-     distancesMatrix = (coefficients * modifiedPts) ./ denominator;
+     numerator = 
+        
+     % test
      
-     inlierIndices = find(distancesMatrix < .2);
-     inliers(:,1) = Pts(inlierIndices,1);
-     inliers(:,2) = Pts(inlierIndices,2);
-     inliers(:,3) = Pts(inlierIndices,3);
-     inlierRGB(:,1) = RGB(inlierIndices,1);
-     inlierRGB(:,2) = RGB(inlierIndices,2);
-     inlierRGB(:,3) = RGB(inlierIndices,3);
+     %j = 1:length(Pts);
+
+    
+%      for j = 1:length(Pts)
+%          
+%          x_curr = Pts(j,1);
+%          y_curr = Pts(j,2);
+%          z_curr = Pts(j,3);
+%          err = subs(planefunction, [x,y,z],[x_curr, y_curr, z_curr]);
+%          
+%          if err < .01
+%              inliers(index,1) = Pts(j,1);
+%              inliers(index,2) = Pts(j,2);
+%              inliers(index,3) = Pts(j,3);
+%              inlierRGB(index,1) = RGB(j,1);
+%              inlierRGB(index,2) = RGB(j,2);
+%              inlierRGB(index,3) = RGB(j,3);
+%              index = index + 1;
+%          end
+%          
+%      end
      
      if (length(inliers) > length(max))
          max = inliers;
