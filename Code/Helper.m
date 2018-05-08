@@ -173,7 +173,36 @@ title('3D Point Cloud');
 
 %%
 
-meanPts = mean(Pts);
+%meanPts = mean(Pts);
+% %SEM = std(Pts)/sqrt(length(Pts));
+% 
+% ts = tinv([0.025  0.975],length(Pts)-1);
+% 
+% CI = mean(Pts) + ts'*SEM;
+
+CI = [(mean(Pts) - std(Pts))' (mean(Pts) + std(Pts))'];
+
+CI = CI';
+
+t = find(Pts(:,1) > CI(1,1) & Pts(:,1) < CI(2,1) & Pts(:,2) > CI(1,2) & Pts(:,2) < CI(2,2) & Pts(:,3) < CI(1,3) & Pts(:,3) < CI(2,3));
+
+%temp = find(Pts > CI(1,:) & Pts < CI(2,:));
+
+
+Pts2 = Pts(t,:);
+
+RGB2 = RGB(t,:);
+
+
+figure,
+pcshow(Pts2,RGB2/255);
+drawnow;
+title('3D Point Cloud');
+%%
+%SEM = std(x)/sqrt(length(x)); 
+% Standard Error
+% ts = tinv([0.025  0.975],length(x)-1);      % T-Score
+% CI = mean(x) + ts*SEM;  
 
 
 %  
