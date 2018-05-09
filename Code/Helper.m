@@ -60,8 +60,6 @@ yo = 0;
 zo = 0;
 
 % Initialize final size of inlier
-max = [];
-maxRGB = [];
 maxIndex = [];
 % 
 pts = ((Pts(:,1)-yo).^2 + (Pts(:,2)-xo).^2 + (Pts(:,2)-zo).^2) < ro.^2;
@@ -87,9 +85,6 @@ k = 100;
 for i = 1:k        
      % Set up inlier
      index = 1;
-     inliers = zeros(length(Pts),3);
-     inliersInd = zeros(length(Pts),1);
-     inlierRGB = zeros(length(Pts),3);
      
      % Pick three points
      sample_pts = randperm(length(Pts),3);
@@ -101,35 +96,14 @@ for i = 1:k
      normal = cross(Pt1-Pt2, Pt1-Pt3);
      syms x y z;
      Pt = [x,y,z];
-     %planefunction = dot(normal, Pt-Pt1); 
      
-     normalUnit = normal/norm(normal);
+     normalUnit = normal/norm(normal);     
+     distancesMatrix = (Pt1 - Pts) * normalUnit';
+     indices = find(abs(distancesMatrix) < 7);
      
-     for j = 1:length(Pts)
-         dist = dot(Pt1-Pts(j,:), normalUnit);
-         % find the points within a certain threshold
-         if abs(dist) < 7
-             inliersInd(index,1) = j;
-             inliers(index,1) = Pts(j,1);
-             inliers(index,2) = Pts(j,2);
-             inliers(index,3) = Pts(j,3);
-             inlierRGB(index,1) = RGB(j,1);
-             inlierRGB(index,2) = RGB(j,2);
-             inlierRGB(index,3) = RGB(j,3);
-             index = index+1;
-         end
+     if (length(indices) > length(maxIndex))
+         maxIndex = indices;
      end
-
-     inliers = inliers(1:index-1,:);
-     inlierRGB = RGB(1:index-1,:);
-     inliersInd = inliersInd(1:index-1,:);
-     
-     if (length(inliers) > length(max))
-         max = inliers;
-         maxRGB = inlierRGB;
-         maxIndex = inliersInd;
-     end
-
 end
 
 %% Remove all the unwanted points
@@ -139,9 +113,7 @@ RGB(maxIndex,:) = [];
 
 %% Remove the second plane
 
-% Initialize final size of inlier
-max = [];
-maxRGB = [];
+maxIndex = [];
 for i = 1:k        
      % Set up inlier
      index = 1;
@@ -159,34 +131,13 @@ for i = 1:k
      normal = cross(Pt1-Pt2, Pt1-Pt3);
      syms x y z;
      Pt = [x,y,z];
-     %planefunction = dot(normal, Pt-Pt1); 
      
-     normalUnit = normal/norm(normal);
+     normalUnit = normal/norm(normal);     
+     distanceMatrix = (Pt1-Pts) * normalUnit';
+     indices = find(abs(distanceMatrix) < 7);
      
-     for j = 1:length(Pts)
-         %dist2Pts = (Pt1-Pts(j,:))./norm(Pt1-Pts(j,:));
-         dist = dot(Pt1-Pts(j,:), normalUnit);
-         % find the points within a certain threshold
-         if abs(dist) < 7
-             inliersInd(index,1) = j;
-             inliers(index,1) = Pts(j,1);
-             inliers(index,2) = Pts(j,2);
-             inliers(index,3) = Pts(j,3);
-             inlierRGB(index,1) = RGB(j,1);
-             inlierRGB(index,2) = RGB(j,2);
-             inlierRGB(index,3) = RGB(j,3);
-             index = index+1;
-         end
-     end
-
-     inliers = inliers(1:index-1,:);
-     inlierRGB = RGB(1:index-1,:);
-     inliersInd = inliersInd(1:index-1,:);
-     
-     if (length(inliers) > length(max))
-         max = inliers;
-         maxRGB = inlierRGB;
-         maxIndex = inliersInd;
+     if (length(indices) > length(maxIndex))
+         maxIndex = indices;
      end
 
 end
