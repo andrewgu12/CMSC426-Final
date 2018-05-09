@@ -12,17 +12,7 @@ while iter < max_iters && e < error
      
      
      c = cross(s,n);
-     
-     %
-          cix cix m ? ciy cix C= ?cizcix
-        ?nix cix i=1 ??niycix
-        cix ciy ciy ciy ciz ciy nix ciy niy ciy niz ciy
-        cix ciz ciy ciz ciz ciz nix ciz niy ciz niz ciz
-        cix nix ciy nix ciz nix nix nix niy nix niz nix
-        cix niy ciy niy ciz niy nix niy niy niy niz niy
-        cixniz ? ciyniz ? cizniz ? nixniz? niy niz ?? niz niz
-        niz cix
-     %
+ 
 end
 
 end
