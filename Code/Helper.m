@@ -334,6 +334,7 @@ figure,
 pcshow(Pts,RGB/255);
 drawnow;
 title('3D Point Cloud');
+saveas(gcf, 'pointcloud.jpg');
 
 Pts10 = Pts;
 
