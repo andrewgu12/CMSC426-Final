@@ -1,11 +1,11 @@
 clc; clear all; close all;
-fileDirPath = '../Data/SingleObject/scene_000/frames/';
+fileDirPath = '../Data/SingleObject/scene_001/frames/';
 fileDir = dir(strcat(fileDirPath, '*.png'));
 numberOfEntries = size(fileDir,1) / 2;
 
 for imageFileCounter = 1:5:numberOfEntries
-    I = imread(strcat(fileDirPath, 'frame_', int2str(imageFileCounter),'_rgb.png'));
-    ID = imread(strcat(fileDirPath, 'frame_', int2str(imageFileCounter), '_depth.png'));
+    I = imread(strcat(fileDirPath, 'image_', int2str(imageFileCounter),'_rgb.png'));
+    ID = imread(strcat(fileDirPath, 'image_', int2str(imageFileCounter), '_depth.png'));
 
     [pcx, pcy, pcz, r, g, b, D_, X, Y,validInd] = depthToCloud_full_RGB(ID, I, './params/calib_xtion.mat');
     Pts = [pcx pcy pcz];
