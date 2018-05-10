@@ -107,7 +107,8 @@ for imageFileCounter = 1:10:numberOfEntries
     Pts = Pts(Index,:);
     RGB = RGB(Index,:);
     if (imageFileCounter ~= 1)
-        s = icp(Pts, s, 3);
+        s = icp(Pts, s, 100);
+        s = unique(s, 'row');
     else
         s = Pts;
     end
