@@ -112,8 +112,10 @@ for imageFileCounter = 1:5:numberOfEntries
         s = Pts;
     end
     %%
+    
     figure;
     pcshow(s);
     drawnow;
     title('3D Point Cloud');
+    saveas(gcf,strcat('../image/',int2str(imageFileCounter)));
 end
