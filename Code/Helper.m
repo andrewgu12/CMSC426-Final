@@ -11,7 +11,7 @@ close all
 Path = '../Data/SingleObject/'; 
 SceneNum = 0;
 SceneName = sprintf('%0.3d', SceneNum);
-FrameNum = num2str(134);
+FrameNum = num2str(10);
 
 I = imread([Path,'scene_',SceneName,'/frames/frame_',FrameNum,'_rgb.png']);
 ID = imread([Path,'scene_',SceneName,'/frames/frame_',FrameNum,'_depth.png']);
@@ -169,9 +169,11 @@ pcshow(Pts,RGB/255);
 drawnow;
 title('3D Point Cloud');
 
-Pts134 = Pts;
+Pts10 = Pts;
 %%
-s = icp(Pts1, Pts, 10);
+s = icp(Pts10, Pts1, 10);
+
+%%
 
 %%
 figure;
