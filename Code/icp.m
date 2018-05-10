@@ -78,5 +78,7 @@ function [S] = icp(s, d, max_iters)
     end
 
     S = s;
-    
+%     merge_clouds(S,d);
+    d = cat(1,d,S);
+    S = d;
 end
