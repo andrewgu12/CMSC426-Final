@@ -4,7 +4,7 @@
 % Acknowledgements: Bhoram Lee of University of Pennsylvania for help with depthToCloud function
 
 clc
-clear all
+%clear all
 close all
 
 %% Setup Paths and Read RGB and Depth Images
@@ -94,8 +94,6 @@ for i = 1:k
      Pt3 = Pts(sample_pts(1,3),:);
 
      normal = cross(Pt1-Pt2, Pt1-Pt3);
-     syms x y z;
-     Pt = [x,y,z];
      
      normalUnit = normal/norm(normal);     
      distancesMatrix = (Pt1 - Pts) * normalUnit';
@@ -172,3 +170,4 @@ drawnow;
 title('3D Point Cloud');
 
 %%
+icp(Pts1, Pts, 100);

@@ -1,21 +1,67 @@
 function [] = icp(s, d, max_iters)
-% maxiters = 100;
-error = .001;
+    % maxiters = 100;
+    error = .001;
 
-R = [1 0 0; 0 1 0; 0 0 1];
-t = [0,0,0];
-n = pcnormals(s);
-     
-while iter < max_iters && e < error
-     ind = dsearchn(s,d);
-     dist = mean(s-d(ind,:));
-     
-     
-     c = cross(s,n);
- 
+    R = [1 0 0; 0 1 0; 0 0 1];
+    t = [0;0;0];
+    n = pcnormals(pointCloud(s));
+    iter = 1;  
+    dist = 1;
+
+    C = 0;
+    B = 0;
+    while (iter < max_iters && dist > error)
+        indS = length(d);
+        if length(d) > length(s)
+            indS = length(s);
+            s = padarray(s,[length(d)-length(s) 0],0,'post');
+        end
+
+         ind = dsearchn(s,d);
+         d = d(ind,:);
+         d = d(1:indS,:);
+         s = s(1:indS,:);
+         
+         dist = mean(norm(s-d));
+
+         for i = 1:length(s)
+            c = cross(s(i,:),n(i,:));
+            
+            %C = zeros(6,6);
+
+             test = [c(1,1); c(1,2); c(1,3); n(i,1); n(i,2); n(i,3)];
+
+             % Calculate C
+             C = C + [test*c(1,1) test*c(1,2) test*c(1,3) test*n(i,1) test*n(i,2) test*n(i,3)];
+
+             b = zeros(6,1);
+
+             b(1,1) = dot(c(1,1)*(s(i,:)-d(i,:)),n(i,:));
+             b(2,1) = dot(c(1,2)*(s(i,:)-d(i,:)),n(i,:));
+             b(3,1) = dot(c(1,3)*(s(i,:)-d(i,:)),n(i,:));
+             b(4,1) = dot(n(i,1)*(s(i,:)-d(i,:)),n(i,:));
+             b(5,1) = dot(n(i,2)*(s(i,:)-d(i,:)),n(i,:));
+             b(6,1) = dot(n(i,3)*(s(i,:)-d(i,:)),n(i,:));
+             
+             % Calculate B
+             B = B + b;
+         end
+         x = C\-B;
+         
+         Rcurr = x(1:3,1)';
+         tcurr = x(4:6,1)';
+         
+         s = Rcurr.*s;
+         s = s + tcurr;
+         R = Rcurr.*R;
+         t = Rcurr.* tcurr + t;
+         
+         iter = iter+1;
+    end
+
+    
 end
 
-end
 % procedure ICP(s, d, max iters)
 % 2: ? = .001
 % 3: R, t = (3x3 identity), (0,0,0)
