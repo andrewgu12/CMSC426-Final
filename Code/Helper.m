@@ -346,3 +346,4 @@ figure;
 pcshow(s);
 drawnow;
 title('3D Point Cloud');
+
