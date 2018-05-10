@@ -1,7 +1,6 @@
 function [S] = icp(s, d, max_iters)
     % maxiters = 100;
     error = .001;
-
     R = eye(3);
     t = zeros(1,3);
     n = pcnormals(pointCloud(s));
@@ -50,7 +49,7 @@ function [S] = icp(s, d, max_iters)
          end
          x = C\-B;
          
-         Rcurr = R;
+         Rcurr = eye(3);
          
          %aby
          Rcurr(1,2) = -x(3,1);
@@ -62,17 +61,12 @@ function [S] = icp(s, d, max_iters)
          
          
          tcurr = x(4:6,1);
-%          
-%          p2=[p2(1,:)+t1(1) ; p2(2,:)+t1(2); p2(3,:)+t1(3)];
-%         p2=p2';
-%         R = R1*R;
-%         t = R1*t + t1;
-           
+         
          s = Rcurr*s';
          s = [s(1,:)+tcurr(1,1) ; s(2,:)+tcurr(2,1); s(3,:)+tcurr(3,1)];
          s = s';
          R = Rcurr*R;
-         t = Rcurr.*t+ tcurr';
+         t = Rcurr.*tcurr+ t;
          
          iter = iter+1;
     end
@@ -81,4 +75,17 @@ function [S] = icp(s, d, max_iters)
 %     merge_clouds(S,d);
     d = cat(1,d,S);
     S = d;
+    
+    %          
+%          p2=[p2(1,:)+t1(1) ; p2(2,:)+t1(2); p2(3,:)+t1(3)];
+%         p2=p2';
+%         R = R1*R;
+%         t = R1*t + t1;
+           
+%          s = Rcurr*s';
+%          s = [s(1,:)+tcurr(1,1) ; s(2,:)+tcurr(2,1); s(3,:)+tcurr(3,1)];
+%          s = s';
+%          R = Rcurr*R;
+%          t = Rcurr.*t+ tcurr';
+
 end

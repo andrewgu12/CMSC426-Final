@@ -3,7 +3,7 @@ fileDirPath = '../Data/SingleObject/scene_000/frames/';
 fileDir = dir(strcat(fileDirPath, '*.png'));
 numberOfEntries = size(fileDir,1) / 2;
 
-for imageFileCounter = 1:10:numberOfEntries
+for imageFileCounter = 1:5:numberOfEntries
     I = imread(strcat(fileDirPath, 'frame_', int2str(imageFileCounter),'_rgb.png'));
     ID = imread(strcat(fileDirPath, 'frame_', int2str(imageFileCounter), '_depth.png'));
 
@@ -30,10 +30,10 @@ for imageFileCounter = 1:10:numberOfEntries
     Pts = [subsetPcx subsetPcy subsetPcz];
     RGB = [subsetR subsetG subsetB];
 
-    figure,
-    pcshow(Pts,RGB/255);
-    drawnow;
-    title('3D Point Cloud');
+%     figure,
+%     pcshow(Pts,RGB/255);
+%     drawnow;
+%     title('3D Point Cloud');
 
     %% Remove the first plane
     k = 100;
@@ -107,7 +107,7 @@ for imageFileCounter = 1:10:numberOfEntries
     Pts = Pts(Index,:);
     RGB = RGB(Index,:);
     if (imageFileCounter ~= 1)
-        s = icp(Pts, s, 3);
+        s = icp(Pts, s, 50);
     else
         s = Pts;
     end
@@ -116,5 +116,4 @@ for imageFileCounter = 1:10:numberOfEntries
     pcshow(s);
     drawnow;
     title('3D Point Cloud');
-    close all;
 end
