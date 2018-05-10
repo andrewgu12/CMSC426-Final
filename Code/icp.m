@@ -13,9 +13,9 @@ function [S] = icp(s, d, max_iters)
     
     while (iter < max_iters && abs(dist) > error)
         indS = length(d);
-        if length(s) > length(d)
+        if length(d) > length(s)
             indS = length(s);
-            s = padarray(s,[length(s)-length(d) 0],0,'post');
+            s = padarray(s,[length(d)-length(s) 0],0,'post');
         end
         
          ind = dsearchn(s,d);
