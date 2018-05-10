@@ -170,4 +170,4 @@ drawnow;
 title('3D Point Cloud');
 
 %%
-icp(Pts1, Pts, 100);
+s = icp(Pts1, Pts, 5);

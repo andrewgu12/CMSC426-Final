@@ -1,22 +1,23 @@
-function [] = icp(s, d, max_iters)
+function [S] = icp(s, d, max_iters)
     % maxiters = 100;
     error = .001;
 
-    R = [1 0 0; 0 1 0; 0 0 1];
-    t = [0;0;0];
+    R = eye(3)
+    t = zeros(1,3);
     n = pcnormals(pointCloud(s));
     iter = 1;  
     dist = 1;
 
     C = 0;
     B = 0;
+    
     while (iter < max_iters && dist > error)
         indS = length(d);
         if length(d) > length(s)
             indS = length(s);
             s = padarray(s,[length(d)-length(s) 0],0,'post');
         end
-
+        
          ind = dsearchn(s,d);
          d = d(ind,:);
          d = d(1:indS,:);
@@ -59,7 +60,7 @@ function [] = icp(s, d, max_iters)
          iter = iter+1;
     end
 
-    
+    S = s;
 end
 
 % procedure ICP(s, d, max iters)
