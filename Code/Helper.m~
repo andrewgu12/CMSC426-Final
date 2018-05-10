@@ -9,12 +9,12 @@ close all
 
 %% Setup Paths and Read RGB and Depth Images
 Path = '../Data/SingleObject/'; 
-SceneNum = 1;
+SceneNum = 0;
 SceneName = sprintf('%0.3d', SceneNum);
-FrameNum = num2str(2);
+FrameNum = num2str(134);
 
-I = imread([Path,'scene_',SceneName,'/frames/image_',FrameNum,'_rgb.png']);
-ID = imread([Path,'scene_',SceneName,'/frames/image_',FrameNum,'_depth.png']);
+I = imread([Path,'scene_',SceneName,'/frames/frame_',FrameNum,'_rgb.png']);
+ID = imread([Path,'scene_',SceneName,'/frames/frame_',FrameNum,'_depth.png']);
 
 %% Extract 3D Point cloud
 % Inputs:
@@ -169,5 +169,12 @@ pcshow(Pts,RGB/255);
 drawnow;
 title('3D Point Cloud');
 
+Pts134 = Pts;
 %%
-icp(Pts1, Pts, 10);
+s = icp(Pts1, Pts, 10);
+
+%%
+figure;
+pcshow(s);
+drawnow;
+title('3D Point Cloud');

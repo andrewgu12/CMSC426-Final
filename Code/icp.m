@@ -18,7 +18,8 @@ function [S] = icp(s, d, max_iters)
             s = padarray(s,[length(d)-length(s) 0],0,'post');
         end
         
-         ind = dsearchn(s,d);
+         ind = knnsearch(d,s);
+         
          d = d(ind,:);
          d = d(1:indS,:);
          s = s(1:indS,:);
